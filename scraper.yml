@@ -1,0 +1,43 @@
+name: 📚 Actualizar precios Buscalibre
+
+on:
+  schedule:
+    # Cada 6 horas: 00:00, 06:00, 12:00, 18:00 UTC
+    # (en Chile = 21:00, 03:00, 09:00, 15:00 en horario de verano)
+    - cron: "0 0,6,12,18 * * *"
+
+  # También permite ejecutarlo manualmente desde la pestaña Actions en GitHub
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    name: Scraping de precios
+    runs-on: ubuntu-latest
+    timeout-minutes: 90  # margen amplio para 528+ libros
+
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: 📦 Instalar dependencias Python
+        run: pip install -r requirements.txt
+
+      - name: 🌐 Instalar navegador Chromium (Playwright)
+        run: playwright install chromium --with-deps
+
+      - name: 🕷️ Ejecutar scraper
+        env:
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: python scraper.py
+
+      - name: 📊 Resultado
+        if: always()
+        run: echo "Scraping finalizado a las $(date '+%d/%m/%Y %H:%M UTC')"
