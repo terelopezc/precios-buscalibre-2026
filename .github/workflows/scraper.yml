@@ -30,9 +30,6 @@ jobs:
 
       - name: 🌐 Instalar navegador Chromium (Playwright)
         run: playwright install chromium --with-deps
-
-      - name: 🌐 Instalar navegador Chromium (Playwright)
-        run: playwright install chromium --with-deps
         env:
           PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
 
