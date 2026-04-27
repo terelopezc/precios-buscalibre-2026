@@ -33,11 +33,6 @@ jobs:
         env:
           PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
 
-      - name: 🔧 Instalar dependencias del sistema
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libasound2t64
-
       - name: 🕷️ Ejecutar scraper
         env:
           SHEET_ID: ${{ secrets.SHEET_ID }}
