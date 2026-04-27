@@ -31,6 +31,16 @@ jobs:
       - name: 🌐 Instalar navegador Chromium (Playwright)
         run: playwright install chromium --with-deps
 
+      - name: 🌐 Instalar navegador Chromium (Playwright)
+        run: playwright install chromium --with-deps
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+
+      - name: 🔧 Instalar dependencias del sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2t64
+
       - name: 🕷️ Ejecutar scraper
         env:
           SHEET_ID: ${{ secrets.SHEET_ID }}
@@ -41,3 +51,5 @@ jobs:
       - name: 📊 Resultado
         if: always()
         run: echo "Scraping finalizado a las $(date '+%d/%m/%Y %H:%M UTC')"
+
+        
